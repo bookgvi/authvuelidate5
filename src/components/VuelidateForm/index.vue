@@ -69,10 +69,14 @@ export default {
     },
     hInput (e, val) {
       this[val].required = String(e.target.value).length > 0
+      e.target.value = val === 'input1' ? this.hasNumber(e.target.value) : e.target.value
       this[val].inputValue = e.target.value
     },
     hBlur (e, val) {
       this[val].required = String(e.target.value).length > 0
+    },
+    hasNumber (val) {
+      return String(val).match(/(\d*)\.?\d*/g)[0]
     }
   }
 }
