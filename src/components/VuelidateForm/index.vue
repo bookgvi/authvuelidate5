@@ -1,16 +1,24 @@
 <template>
   <b-container>
     <b-form @submit.prevent="onSubmit">
-      <b-input-component
-        :inputVal="input1"
-        @hInput="hInput"
-      />
-      <div v-if="!input1.validate" class="error"> * Поле обязательно для заполнения </div>
-      <b-input-component
-        :inputVal="input2"
-        @hInput="hInput"
-      />
-      <div v-if="!input2.validate" class="error"> * Поле обязательно для заполнения </div>
+      <b-row align-h="center">
+        <b-col cols="4" align="left">
+          <label class="w-100">
+            Input #1:
+            <b-form-input :value="input1.inputValue" @input.native="hInput($event, 'input1')" :class="{ error: !input1.validate }" />
+            <div v-if="!input1.validate" class="error"> * Поле обязательно для заполнения </div>
+          </label>
+        </b-col>
+      </b-row>
+      <b-row align-h="center">
+        <b-col cols="4" align="left">
+          <label class="w-100">
+            Input #2:
+            <b-form-input :value="input2.inputValue" @input.native="hInput($event, 'input2')" :class="{ error: !input2.validate }" />
+            <div v-if="!input2.validate" class="error"> * Поле обязательно для заполнения </div>
+          </label>
+        </b-col>
+      </b-row>
       <b-row align-h="center" class="mt-3">
         <b-col cols="4" align="start">
           <b-button type="submit" class="w-100"> Click me </b-button>
@@ -21,22 +29,18 @@
 </template>
 
 <script>
-import BInputComponent from '@/components/VuelidateForm/inputComponent'
 export default {
   name: 'vuelidateForm',
-  components: { BInputComponent },
   data () {
     return {
       self: this,
       input1: {
         inputValue: '',
-        validate: true,
-        inputKey: 'input1'
+        validate: true
       },
       input2: {
         inputValue: '',
-        validate: true,
-        inputKey: 'input2'
+        validate: true
       }
     }
   },
@@ -53,9 +57,9 @@ export default {
         }
       } while (isInput)
     },
-    hInput ({ e, val, validate }) {
+    hInput (e, val) {
+      this[val].validate = true
       this[val].inputValue = e.target.value
-      this[val].validate = validate
     }
   }
 }
