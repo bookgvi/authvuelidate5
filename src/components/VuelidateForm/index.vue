@@ -1,15 +1,16 @@
 <template>
   <b-container>
     <b-form @submit.prevent="onSubmit">
-      <b-row align-h="center">
-        <b-col cols="4" align="start">
-          <label class="w-100">
-            Input #1:
-            <b-form-input :value="input1" @input.native="hInput($event, 'input1', 'valid')" :class="{ error: !valid }"/>
-          </label>
-          <div v-if="!valid" class="error"> * Поле обязательно для заполнения </div>
-        </b-col>
-      </b-row>
+      <b-input-component
+        :inputVal="input1"
+        @hInput="hInput"
+      />
+      <div v-if="!input1.validate" class="error"> * Поле обязательно для заполнения </div>
+      <b-input-component
+        :inputVal="input2"
+        @hInput="hInput"
+      />
+      <div v-if="!input2.validate" class="error"> * Поле обязательно для заполнения </div>
       <b-row align-h="center" class="mt-3">
         <b-col cols="4" align="start">
           <b-button type="submit" class="w-100"> Click me </b-button>
@@ -20,27 +21,47 @@
 </template>
 
 <script>
+import BInputComponent from '@/components/VuelidateForm/inputComponent'
 export default {
   name: 'vuelidateForm',
+  components: { BInputComponent },
   data () {
     return {
-      input1: '',
-      valid: true
+      self: this,
+      input1: {
+        inputValue: '',
+        validate: true,
+        inputKey: 'input1'
+      },
+      input2: {
+        inputValue: '',
+        validate: true,
+        inputKey: 'input2'
+      }
     }
   },
   methods: {
     onSubmit () {
-      this.valid = String(this.input1).length > 0
+      let isInput = true
+      let i = 1
+      do {
+        if (this[`input${i}`]) {
+          this[`input${i}`].validate = String(this[`input${i}`].inputValue).length > 0
+          i++
+        } else {
+          isInput = false
+        }
+      } while (isInput)
     },
-    hInput (e, inputVal, validator) {
-      this[validator] = true
-      this[inputVal] = e.target.value
+    hInput ({ e, val, validate }) {
+      this[val].inputValue = e.target.value
+      this[val].validate = validate
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
   .error {
     color: red;
     font-size: 0.7em;
