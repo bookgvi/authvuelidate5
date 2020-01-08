@@ -9,9 +9,9 @@
               :value="input1.inputValue"
               @input.native="hInput($event, 'input1')"
               @blur.native="hBlur($event,'input1')"
-              :class="{ error: !input1.validate }"
+              :class="{ error: !input1.required }"
             />
-            <div v-if="!input1.validate" class="error"> * Поле обязательно для заполнения </div>
+            <div v-if="!input1.required" class="error"> * Поле обязательно для заполнения </div>
           </label>
         </b-col>
       </b-row>
@@ -23,9 +23,9 @@
               :value="input2.inputValue"
               @input.native="hInput($event, 'input2')"
               @blur.native="hBlur($event,'input2')"
-              :class="{ error: !input2.validate }"
+              :class="{ error: !input2.required }"
             />
-            <div v-if="!input2.validate" class="error"> * Поле обязательно для заполнения </div>
+            <div v-if="!input2.required" class="error"> * Поле обязательно для заполнения </div>
           </label>
         </b-col>
       </b-row>
@@ -46,11 +46,11 @@ export default {
       self: this,
       input1: {
         inputValue: '',
-        validate: true
+        required: true
       },
       input2: {
         inputValue: '',
-        validate: true
+        required: true
       }
     }
   },
@@ -60,7 +60,7 @@ export default {
       let i = 1
       do {
         if (this[`input${i}`]) {
-          this[`input${i}`].validate = String(this[`input${i}`].inputValue).length > 0
+          this[`input${i}`].required = String(this[`input${i}`].inputValue).length > 0
           i++
         } else {
           isInput = false
@@ -68,11 +68,11 @@ export default {
       } while (isInput)
     },
     hInput (e, val) {
-      this[val].validate = String(e.target.value).length > 0
+      this[val].required = String(e.target.value).length > 0
       this[val].inputValue = e.target.value
     },
     hBlur (e, val) {
-      this[val].validate = String(e.target.value).length > 0
+      this[val].required = String(e.target.value).length > 0
     }
   }
 }
