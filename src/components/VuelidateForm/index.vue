@@ -5,7 +5,12 @@
         <b-col cols="4" align="left">
           <label class="w-100">
             Input #1:
-            <b-form-input :value="input1.inputValue" @input.native="hInput($event, 'input1')" :class="{ error: !input1.validate }" />
+            <b-form-input
+              :value="input1.inputValue"
+              @input.native="hInput($event, 'input1')"
+              @blur.native="hBlur($event,'input1')"
+              :class="{ error: !input1.validate }"
+            />
             <div v-if="!input1.validate" class="error"> * Поле обязательно для заполнения </div>
           </label>
         </b-col>
@@ -14,7 +19,12 @@
         <b-col cols="4" align="left">
           <label class="w-100">
             Input #2:
-            <b-form-input :value="input2.inputValue" @input.native="hInput($event, 'input2')" :class="{ error: !input2.validate }" />
+            <b-form-input
+              :value="input2.inputValue"
+              @input.native="hInput($event, 'input2')"
+              @blur.native="hBlur($event,'input2')"
+              :class="{ error: !input2.validate }"
+            />
             <div v-if="!input2.validate" class="error"> * Поле обязательно для заполнения </div>
           </label>
         </b-col>
@@ -58,8 +68,11 @@ export default {
       } while (isInput)
     },
     hInput (e, val) {
-      this[val].validate = true
+      this[val].validate = String(e.target.value).length > 0
       this[val].inputValue = e.target.value
+    },
+    hBlur (e, val) {
+      this[val].validate = String(e.target.value).length > 0
     }
   }
 }
